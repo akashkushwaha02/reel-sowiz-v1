@@ -1,6 +1,8 @@
 import React, { useState,useEffect } from 'react'
 import {database} from '../firebase';
 import CircularProgress from '@mui/material/CircularProgress';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 import Video from './Video'
 import './Posts.css'
 import Avatar from '@mui/material/Avatar';
@@ -16,6 +18,7 @@ import Comments from './Comments'
 function Posts({userData}) {
     const [posts,setPosts] = useState(null);
     const [open, setOpen] = useState(null);
+    const [original, setOriginal] = useState(null)
 
     const handleClickOpen = (id) => {
         setOpen(id);
@@ -33,6 +36,7 @@ function Posts({userData}) {
                 parr.push(data)
             })
             setPosts(parr)
+            setOriginal(parr)
         })
         return unsub
     },[])
@@ -47,7 +51,7 @@ function Posts({userData}) {
             })
         })
     }
-    let observer = new IntersectionObserver(callback, {threshold:0.6});
+    let observer = new IntersectionObserver(callback, {threshold:0.7});
     useEffect(()=>{
         const elements = document.querySelectorAll(".videos")
         elements.forEach((element)=>{
@@ -57,23 +61,55 @@ function Posts({userData}) {
             observer.disconnect();
         }
     },[posts])
+
+    const handleClick = (e) =>{
+
+        setPosts(posts.filter((post)=> post.category === e.target.innerText))
+    }
+
+    const handleReset = () =>{
+        setPosts(original)
+    }
+
+    let filterData = [... new Set(posts?.map((post)=> post.category))]
+   
     return (
         <div>
             {
                 posts==null || userData==null ? <CircularProgress /> :
-                <div className="video-container">
+                <>
+                 <Stack direction="row" justifyContent="center" spacing={1} style={{  marginBottom: '20px' }} >
+               
+               Select Filter
+            </Stack>
+             
+             <Stack direction="row" justifyContent="center" spacing={1} style={{  marginBottom: '20px' }} >
+               
+                {
+                    filterData?.map((post)=>{
+                        return <Chip label={post} variant="outlined" onClick={handleClick}  />
+                    })
+                }
+               
+                    <Chip label='Reset' variant="outlined" onClick={handleReset}  />
+                
+            </Stack>
+        
+
+                                    <div className="video-container">
                     {
                         posts.map((post,index)=>(
                             <React.Fragment key={index}>
-                                {console.log(post)}
-                                <div className="videos">
+                                <div className="videos" style={{ background: '#D3D3D3', marginBottom: '25px'}}>
                                     <Video src={post.pUrl} id={post.pId}/>
-                                    <div className="fa" style={{display:'flex'}}>
+                                   <div style={{ display: 'flex'}}>
+                                     <div className="fa" style={{display:'flex'}}>
                                         <Avatar src={post.uProfile} />
                                         <h4>{post.uName}</h4>
                                     </div>
                                     <Like userData={userData} postData={post}/>
                                     <ChatBubbleIcon className="chat-styling" onClick={()=>handleClickOpen(post.pId)}/>
+                                   </div>
                                     <Dialog
                                         open={open==post.pId}
                                         onClose={handleClose}
@@ -106,7 +142,10 @@ function Posts({userData}) {
                             </React.Fragment>
                         ))
                     }
+                    
                 </div>
+   
+</>
             }
         </div>
     )
