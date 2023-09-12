@@ -1,5 +1,5 @@
 .video-container{
-    height: 80vh;
+    height: 70vh;
     border-radius: 20px;
     background-color: white;
     overflow: scroll;
@@ -13,6 +13,7 @@
 
 .videos{
     position: relative;
+    height: 65vh;
 }
 
 .fa{

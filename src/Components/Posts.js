@@ -80,11 +80,7 @@ function Posts({userData}) {
                 <>
                  <Stack direction="row" justifyContent="center" spacing={1} style={{  marginBottom: '20px' }} >
                
-               Select Filter
-            </Stack>
-             
-             <Stack direction="row" justifyContent="center" spacing={1} style={{  marginBottom: '20px' }} >
-               
+               Select Filter:- 
                 {
                     filterData?.map((post)=>{
                         return <Chip label={post} variant="outlined" onClick={handleClick}  />
@@ -92,11 +88,11 @@ function Posts({userData}) {
                 }
                
                     <Chip label='Reset' variant="outlined" onClick={handleReset}  />
-                
             </Stack>
+            
         
 
-                                    <div className="video-container">
+                    <div className="video-container">
                     {
                         posts.map((post,index)=>(
                             <React.Fragment key={index}>
