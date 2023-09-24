@@ -21,7 +21,7 @@ export default function Signup() {
             textAlign:'center'
         },
         card2:{
-            height:'5vh',
+            height:'50px',
             marginTop:'2%'
         }
     })
